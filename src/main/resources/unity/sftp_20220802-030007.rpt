@@ -1,0 +1,26 @@
+{
+    "sftpReport": {
+        "date": "20220802T030007.511Z",
+        "sentFileCount": 10",
+        "sfailedFileCount": "0",
+        "sent": {
+            "files": [
+
+            ]
+        },
+        "failed": {
+                "files": [
+                    "LCU_commercial_CUK@C_NEWSBUS_20220802030007_1.mrdf.pgp",
+                    "LCU_commercial_CUK@C_NEWSBUS_20220802030007_1.ps.pgp",
+                    "LPI-ip_perireland_dac_PIRE@R_DAILY_20220802030007_1.mrdf.pgp",
+                    "LPI-ip_perireland_dac_PIRE@R_DAILY_20220802030007_1.ps.pgp",
+                    "LPU-ip_standard_PUK@L_DEFLT_20220802030007_1.mrdf.pgp",
+                    "LPU-ip_standard_PUK@L_DEFLT_20220802030007_1.ps.pgp",
+                    "LPU-ip_standard_PUK@L_TELSN_20220802030007_1.mrdf.pgp",
+                    "LPU-ip_standard_PUK@L_TELSN_20220802030007_1.ps.pgp",
+                    "LPU-ip_standard_PUK@L_TELSN_20220802011037_1.mrdf.pgp",
+                    "LPU-ip_standard_PUK@L_TELSN_20220802011037_1.ps.pgp"
+                ]
+            }
+    }
+}

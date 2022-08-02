@@ -1,0 +1,18 @@
+{
+    "postalReport": {
+        "datetime": "20220802T171011.511Z",
+        "batchStatus: "success",
+        "successFileCount": "11",
+        "failedFileCount": "1",
+        "rejectedFileCount": "0",
+        "failed": {
+            "files": [
+                "standard_CBP-AN-AN1_149045989.xml"
+            ]
+        },
+        "rejected": {
+            "files": [
+            ]
+        }
+    }
+}
