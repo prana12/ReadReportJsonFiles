@@ -1,11 +1,16 @@
 package org.example;
 
-import java.io.File;
-import java.io.FilenameFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.json.PostalReport;
+
+import java.io.*;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,15 +29,35 @@ public class Main {
         LocalDateTime endDateTime = LocalDateTime.of(LocalDate.of(2022, 8, 2), LocalTime.of(07, 00));
         //System.out.println("startDateTime=" + startDateTime + " AND endDateTime=" + endDateTime);
 
-        readReportFiles("/Users/prakash/Desktop/ReadJsonFiles/src/main/resources/postal/", startDateTime, endDateTime);
+        File[] selectedFiles = readReportFiles("/Users/prakash/Desktop/ReadJsonFiles/src/main/resources/postal/", startDateTime, endDateTime);
+        Arrays.sort(selectedFiles, Comparator.comparing(File::getName));
+        //Arrays.sort(selectedFiles, Comparator.comparing(File::getName).reversed());
+
+        //readReportFile(selectedFiles[0]);
+        /*String fileContents = readFile(selectedFiles[0].getAbsolutePath());
+        System.out.println(fileContents);*/
+
+        //PostalReport postalReport = readPostalReport(selectedFiles[0]);
+        PostalReport postalReport = readPostalReport(new File("/Users/prakash/Desktop/ReadJsonFiles/src/main/resources/postal/postal_20220801-113411.json"));
 
         System.out.println("STOP");
     }
 
     //read files from directory
-    private static void readReportFiles(String location, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    private static File[] readReportFiles(String location, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         File directory = new File(location);
-        String[] fileNames = directory.list(new FilenameFilter() {
+        File[] files = directory.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String fileName) {
+                if(fileName.startsWith("postal") && fileName.endsWith(".rpt")) {
+                    boolean isReportFileSelected = isFileSelected(fileName, startDateTime, endDateTime);
+                    return isReportFileSelected;
+                }
+                return false;
+            }
+        });
+
+        /*String[] fileNames = directory.list(new FilenameFilter() {
             public boolean accept(File dir, String fileName) {
                 if(fileName.startsWith("postal") && fileName.endsWith(".rpt")) {
                     boolean isReportFileSelected = isFileSelected(fileName, startDateTime, endDateTime);
@@ -49,7 +74,9 @@ public class Main {
             System.out.println(file);
         });
 
-        System.out.println(fileNames.length);
+        System.out.println(fileNames.length);*/
+
+        return files;
     }
 
     //check if the provided file needs to be selected
@@ -87,4 +114,66 @@ public class Main {
         boolean selectFile = fileGeneratedDateTime.compareTo(startDateTime) >= 0 && fileGeneratedDateTime.compareTo(endDateTime) <= 0;
         return selectFile;
     }
+
+    //read a single file contents
+    private static void readReportFile(File file) {
+        //System.out.println(file.getAbsoluteFile());
+        System.out.println(file.getAbsolutePath());
+        try {
+            File myObj = new File(file.getAbsolutePath());
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                System.out.println(data);
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    //read file
+    public static String readFile(String filename)
+    {
+        String content = null;
+        File file = new File(filename); // For example, foo.txt
+        FileReader reader = null;
+        try {
+            reader = new FileReader(file);
+            char[] chars = new char[(int) file.length()];
+            reader.read(chars);
+            content = new String(chars);
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(reader != null){
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return content;
+    }
+
+    //read json rpt file
+    private static PostalReport readPostalReport(File file) {
+        ObjectMapper mapper = new ObjectMapper();
+        PostalReport postalReport = null;
+
+        try {
+            //postalReport = mapper.readValue(new File(file.getAbsolutePath()), PostalReport.class);
+            postalReport = mapper.readValue(Paths.get(file.getAbsolutePath()).toFile(), PostalReport.class);
+            System.out.println(postalReport);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return postalReport;
+    }
+
 }

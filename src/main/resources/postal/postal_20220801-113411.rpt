@@ -1,7 +1,7 @@
 {
     "postalReport": {
         "datetime": "20220802T171011.511Z",
-        "batchStatus: "success",
+        "batchStatus": "success",
         "successFileCount": "11",
         "failedFileCount": "1",
         "rejectedFileCount": "0",
